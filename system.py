@@ -9,7 +9,7 @@ import re
 from googletrans import Translator
 
 # Dataset
-data = pd.read_csv('../avaliacao2/goodreads_data.csv')
+data = pd.read_csv('goodreads_data.csv')
 data = data.drop('URL', axis=1)
 data['Description'].fillna('', inplace=True)
 data['Num_Ratings'] = data['Num_Ratings'].str.replace(',', '').astype(float)
