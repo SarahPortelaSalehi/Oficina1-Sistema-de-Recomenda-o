@@ -1,44 +1,33 @@
-import numpy as np 
-import pandas as pd 
-import matplotlib.pyplot as plt
-import seaborn as sns 
-from nltk.corpus import stopwords
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics.pairwise import euclidean_distances
 import streamlit as st
-import re
-from dataset import *
+from system import *
+from style import page_style
 
 def recommend_app():
+    st.markdown(page_style, unsafe_allow_html=True)
+
     st.title("Sistema de Recomendação de Livros")
 
-    autor_input = st.selectbox("Selecione o Autor", autores)
+    author_input = st.selectbox("Qual autor escreve bons livros?", autores)
     
-    description_input = st.text_area("Descrição")
+    description_input = st.text_area("Imagine uma descrição para um livro:")
     
-    generos_selecionados = st.multiselect("Selecione os Gêneros", generos)
+    genres_input = st.multiselect("Selecione os gêneros que mais gosta:", generos)
 
-    avg_rating_input = st.slider("Selecione o Rating Médio", min_avg_rating, max_avg_rating, (min_avg_rating + max_avg_rating) / 2)
-    num_ratings_input = st.slider("Selecione o Número de Ratings", min_num_ratings, max_num_ratings, (min_num_ratings + max_num_ratings) / 2)
+    avg_rating_input = st.slider("Quão bem avaliado você espera que seja?", min_avg_rating, max_avg_rating, (min_avg_rating + max_avg_rating) / 2)
+
+    num_ratings_input = st.slider("Escolha o número de avaliações que acredita ser relevante:", min_num_ratings, max_num_ratings, (min_num_ratings + max_num_ratings) / 2)
 
     if st.button("Obter Recomendações"):
-        # Transformar novas entradas com os modelos TF-IDF existentes
-        author_new = tfidf_author.transform([autor_input])
-
-        # Calcular a similaridade de cosseno entre a nova entrada do autor e os autores existentes
-        cosine_similarities = cosine_similarity(author_new, Author_TFIDF)
-
-        # Ordenar os índices em ordem decrescente de similaridade
-        similar_books_indices = cosine_similarities.argsort()[0][::-1]
-
-        # Recomendar os 10 livros mais similares
-        recommended_books = data.iloc[similar_books_indices[:10]]
-
-        # Exibir os livros recomendados
+        books = recommended_books(author_input, description_input, genres_input, avg_rating_input, num_ratings_input)
         st.write("Aqui estão suas recomendações:")
-        st.write(recommended_books)
+        for index, livro in books.iterrows():
+            st.markdown(f"**Livro {index + 1}:** _{livro['Book']}_")
+            st.markdown(f"Descrição: _{livro['Description']}_")
+            st.markdown(f"Autor: _{livro['Author']}_")
+            st.markdown(f"Gêneros: _{livro['Genres']}_")
+            st.markdown(f"Avaliação Média: _{livro['Avg_Rating']}_")
+            st.markdown(f"Número de Avaliações: _{livro['Num_Ratings']}_")
+            st.markdown("---")
 
 recommend_app()
 
