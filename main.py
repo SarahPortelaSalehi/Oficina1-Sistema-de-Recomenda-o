@@ -7,7 +7,7 @@ def recommend_app():
 
     st.title("Sistema de Recomendação de Livros")
 
-    author_input = st.selectbox("Qual autor escreve bons livros?", autores)
+    author_input = st.multiselect("Quais autores tem interesse?", autores)
     
     description_input = st.text_area("Imagine uma descrição para um livro:")
     

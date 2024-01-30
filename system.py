@@ -5,7 +5,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import euclidean_distances
 import re
-# pip install googletrans==4.0.0-rc1
 from googletrans import Translator
 
 # Dataset
@@ -55,11 +54,13 @@ def traduzir_texto(texto):
     traducao = translator.translate(texto, src='pt', dest='en')
     return traducao.text
 
-# Função auxiliar
+# Função de recomendação
 def recommended_books(author_input, description_input, genres_input, avg_rating_input, num_ratings_input):
     data_copy = data.copy()
 
-    author_input_tfidf = tfidf_author.transform([author_input])
+    author_input_str = ', '.join(author_input)
+
+    author_input_tfidf = tfidf_author.transform([author_input_str])
     author_cosine_similarities = cosine_similarity(author_input_tfidf, Author_TFIDF).flatten()
 
     if description_input:
