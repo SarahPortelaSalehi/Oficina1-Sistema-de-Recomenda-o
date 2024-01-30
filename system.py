@@ -39,8 +39,8 @@ Description_TFIDF = tfidf_description.fit_transform(data['Description'])
 Genres_TFIDF = tfidf_genres.fit_transform(data['Genres'])
 
 # Normalização
-scaler_avg_rating = MinMaxScaler(copy=True)
-scaler_num_ratings = MinMaxScaler(copy=True)
+scaler_avg_rating = MinMaxScaler()
+scaler_num_ratings = MinMaxScaler()
 
 Avg_Rating_Normalized = scaler_avg_rating.fit_transform(data[['Avg_Rating']])
 Num_Ratings_Normalized = scaler_num_ratings.fit_transform(data[['Num_Ratings']])
